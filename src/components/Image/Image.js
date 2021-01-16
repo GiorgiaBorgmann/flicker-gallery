@@ -12,13 +12,16 @@ class Image extends React.Component {
   constructor(props) {
     super(props);
     this.calcImageSize = this.calcImageSize.bind(this);
+    this.rotateImage = this.rotateImage.bind(this)
     this.state = {
-      size: 200
+      size: 200,
+      display: "",
+      rotation: 0
     };
   }
 
   calcImageSize() {
-    const {galleryWidth} = this.props;
+    const { galleryWidth } = this.props;
     const targetSize = 200;
     const imagesPerRow = Math.round(galleryWidth / targetSize);
     const size = (galleryWidth / imagesPerRow);
@@ -35,22 +38,44 @@ class Image extends React.Component {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
 
+  rotateImage() {
+    this.setState({ rotation: this.state.rotation + 90 })
+  }
+
   render() {
+
     return (
       <div
-        className="image-root"
+        className={"image-root"}
+
         style={{
-          backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
+          position: 'relative',
           width: this.state.size + 'px',
-          height: this.state.size + 'px'
-        }}
+          height: this.state.size + 'px',
+          display: this.state.display
+        }}>
+        <div
+          className={"rotate"}
+          style={{
+            backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
+            width: this.state.size + 'px',
+            height: this.state.size + 'px',
+            display: this.state.display,
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            transform: `rotate(${this.state.rotation}deg)`,
+          }}
         >
-        <div>
-          <FontAwesome className="image-icon" name="sync-alt" title="rotate"/>
-          <FontAwesome className="image-icon" name="trash-alt" title="delete"/>
-          <FontAwesome className="image-icon" name="expand" title="expand"/>
+        </div>
+        <div className="control-panel">
+          <FontAwesome onClick={this.rotateImage}
+            className="image-icon" name="sync-alt" title="rotate" />
+          <FontAwesome className="image-icon" name="trash-alt" title="delete" />
+          <FontAwesome className="image-icon" name="expand" title="expand" />
         </div>
       </div>
+
     );
   }
 }

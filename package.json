@@ -22,7 +22,7 @@
   },
   "repository": "",
   "keywords": [],
-  "author": "Your name here",
+  "author": "Giorgia Borgmann",
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-eslint": "^6.0.0",
@@ -80,7 +80,8 @@
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
-    "react-fontawesome": "^1.6.1"
+    "react-fontawesome": "^1.6.1",
+    "react-modal": "^3.12.1"
   },
   "gh-pages-deploy": {
     "staticpath": "dist",

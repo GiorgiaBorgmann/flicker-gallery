@@ -1,14 +1,17 @@
 .gallery-root {
-  text-align: center;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
 }
 
 .gallery-header {
-  background-color: #222;
-  padding: 10px;
-  color: white;
-  font-size: 20pt;
+    background-color: #222;
+    padding: 10px;
+    color: white;
+    font-size: 20pt;
 }
 
 .gallery-intro {
-  font-size: 15pt;
+    font-size: 15pt;
 }

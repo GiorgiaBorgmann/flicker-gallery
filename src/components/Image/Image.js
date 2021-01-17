@@ -27,7 +27,7 @@ class Image extends React.Component {
     const { galleryWidth } = this.props;
     const targetSize = 200;
     const imagesPerRow = Math.round(galleryWidth / targetSize);
-    const size = (galleryWidth / imagesPerRow);
+    const size = Math.round(galleryWidth / imagesPerRow);
     this.setState({
       size
     });
@@ -48,20 +48,19 @@ class Image extends React.Component {
   deleteImage = () => {
     this.setState({ display: 'none' })
   }
+
   modelOpener = () => {
     this.setState({ openModal: true })
   }
+
   closeModal = () => {
     this.setState({ openModal: false })
   }
-  render() {
 
+  render() {
     return (
-      <div
-        className={"image-root"}
+      <div className='image-root'
         style={{
-          position: 'relative',
-          width: this.state.size + 'px',
           height: this.state.size + 'px',
           display: this.state.display
         }}>
@@ -69,7 +68,7 @@ class Image extends React.Component {
           className={'rotate'}
           style={{
             backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
-            width: this.state.size + 'px',
+            width: '100%',
             height: this.state.size + 'px',
             display: this.state.display,
             position: 'absolute',

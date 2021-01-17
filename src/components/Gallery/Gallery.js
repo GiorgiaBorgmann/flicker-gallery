@@ -33,6 +33,7 @@ class Gallery extends React.Component {
       method: 'GET'
     })
       .then(res => res.data)
+
       .then(res => {
         if (
           res &&

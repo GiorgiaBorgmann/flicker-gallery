@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
+import Modal from '../Modal/Modal';
 import './Image.scss';
 
 class Image extends React.Component {
@@ -12,11 +13,13 @@ class Image extends React.Component {
   constructor(props) {
     super(props);
     this.calcImageSize = this.calcImageSize.bind(this);
-    this.rotateImage = this.rotateImage.bind(this)
+    this.rotateImage = this.rotateImage.bind(this);
+    this.modelOpener = this.modelOpener.bind(this);
     this.state = {
       size: 200,
-      display: "",
-      rotation: 0
+      display: '',
+      rotation: 0,
+      openModal: false
     };
   }
 
@@ -42,12 +45,20 @@ class Image extends React.Component {
     this.setState({ rotation: this.state.rotation + 90 })
   }
 
+  deleteImage = () => {
+    this.setState({ display: 'none' })
+  }
+  modelOpener = () => {
+    this.setState({ openModal: true })
+  }
+  closeModal = () => {
+    this.setState({ openModal: false })
+  }
   render() {
 
     return (
       <div
         className={"image-root"}
-
         style={{
           position: 'relative',
           width: this.state.size + 'px',
@@ -55,7 +66,7 @@ class Image extends React.Component {
           display: this.state.display
         }}>
         <div
-          className={"rotate"}
+          className={'rotate'}
           style={{
             backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
             width: this.state.size + 'px',
@@ -68,14 +79,14 @@ class Image extends React.Component {
           }}
         >
         </div>
-        <div className="control-panel">
+        <div className='control-panel'>
           <FontAwesome onClick={this.rotateImage}
             className="image-icon" name="sync-alt" title="rotate" />
           <FontAwesome className="image-icon" name="trash-alt" title="delete" />
-          <FontAwesome className="image-icon" name="expand" title="expand" />
+          <FontAwesome onClick={this.modelOpener} className='image-icon' name='expand' title='expand' />
         </div>
+        <Modal openModal={this.state.openModal} closeModal={this.closeModal} modelOpener={this.modelOpener} dto={this.props.dto} ></Modal>
       </div>
-
     );
   }
 }

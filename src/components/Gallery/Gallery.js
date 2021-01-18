@@ -4,6 +4,7 @@ import axios from 'axios';
 import Image from '../Image';
 import './Gallery.scss';
 
+
 class Gallery extends React.Component {
   static propTypes = {
     tag: PropTypes.string
@@ -13,7 +14,10 @@ class Gallery extends React.Component {
     super(props);
     this.state = {
       images: [],
-      galleryWidth: this.getGalleryWidth()
+      galleryWidth: this.getGalleryWidth(),
+      page: 1,
+      loading: false,
+      prevY: 0
     };
   }
 
@@ -24,9 +28,9 @@ class Gallery extends React.Component {
       return 1000;
     }
   }
-
   getImages(tag) {
-    const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
+    this.setState({ loading: true });
+    const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&page=${this.state.page}&format=json&nojsoncallback=1`;
     const baseUrl = 'https://api.flickr.com/';
     axios({
       url: getImagesUrl,
@@ -39,18 +43,64 @@ class Gallery extends React.Component {
           res &&
           res.photos &&
           res.photos.photo &&
-          res.photos.photo.length > 0
+          res.photos.photo.length > 0 &&
+          this.props.tag === ''
         ) {
-          this.setState({images: res.photos.photo});
+          this.setState({ page: 1 })
+          this.setState({ images: [] });
+          this.setState({ loading: false });
+
+        } else if (
+          res &&
+          res.photos &&
+          res.photos.photo &&
+          res.photos.photo.length > 0 &&
+          this.state.page === 1
+        ) {
+          this.setState({ images: res.photos.photo });
+          this.setState({ loading: false });
+        }
+        else if (
+          res &&
+          res.photos &&
+          res.photos.photo &&
+          res.photos.photo.length > 0 &&
+          this.state.page > 1
+        ) {
+          this.setState({ images: [...this.state.images, ...res.photos.photo] });
+          this.setState({ loading: false });
         }
       });
   }
+
 
   componentDidMount() {
     this.getImages(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth
     });
+    let options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    };
+
+    this.observer = new IntersectionObserver(
+      this.handleObserver.bind(this),
+      options
+    );
+    this.observer.observe(this.loadingRef);
+  }
+  handleObserver(entities) {
+    const y = entities[0].boundingClientRect.y;
+    if (this.state.prevY > y) {
+      this.setState(prevState => (
+        {
+          page: prevState.page + 1
+        }
+      ), this.getImages(this.props.tag))
+    }
+    this.setState({ prevY: y });
   }
 
   componentWillReceiveProps(props) {
@@ -58,12 +108,30 @@ class Gallery extends React.Component {
   }
 
   render() {
+    const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
+    const loadingCSS = {
+      height: '100px',
+      margin: '30px',
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%'
+    };
     return (
-      <div className="gallery-root">
-        {this.state.images.map(dto => {
-          return <Image key={'image-' + dto.id} dto={dto} galleryWidth={this.state.galleryWidth}/>;
+
+      <div className='gallery-root'>
+          {this.state.images.map((dto, index) => {
+            let key = `image-${dto.id}${index}`
+            return <Image key={key} dto={dto} galleryWidth={this.state.galleryWidth} />;
         })}
+
+        <div
+          ref={loadingRef => (this.loadingRef = loadingRef)}
+          style={loadingCSS}
+        >
+          <span style={loadingTextCSS}>Loading...</span>
+        </div>
       </div>
+
     );
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import './App.scss';
 import Gallery from '../Gallery';
 
+
+
 class App extends React.Component {
   static propTypes = {
   };
@@ -15,6 +17,7 @@ class App extends React.Component {
 
   render() {
     return (
+
       <div className="app-root">
         <div className="app-header">
           <h2>Flickr Gallery</h2>
@@ -22,6 +25,7 @@ class App extends React.Component {
         </div>
         <Gallery tag={this.state.tag}/>
       </div>
+
     );
   }
 }

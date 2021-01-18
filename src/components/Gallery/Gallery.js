@@ -135,6 +135,7 @@ class Gallery extends React.Component {
   onDragEnd = () => {
     this.draggedItem = null;
   };
+  
 
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };

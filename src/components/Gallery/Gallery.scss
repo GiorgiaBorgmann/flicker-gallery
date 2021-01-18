@@ -3,18 +3,19 @@
     display: flex;
     flex-wrap: wrap;
     width: 100vw;
-    
-  }
-li{
-  background-size: cover;
+}
+
+li {
+    background-size: cover;
     background-position: center center;
     vertical-align: top;
     box-sizing: border-box;
     position: relative;
-    border: 1px solid white;
+    border: 1px solid #2b2b2b;
     overflow: hidden;
     width: 25%;
 }
+
 .gallery-header {
     background-color: #222;
     padding: 10px;
@@ -25,14 +26,15 @@ li{
 .gallery-intro {
     font-size: 15pt;
 }
+
 @media (max-width: 680px) {
-  li {
-      width: 50%;
-  }
+    li {
+        width: 50%;
+    }
 }
 
 @media (max-width: 360px) {
-  li {
-      width: 100%;
-  }
+    li {
+        width: 100%;
+    }
 }

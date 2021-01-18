@@ -107,6 +107,35 @@ class Gallery extends React.Component {
     this.getImages(props.tag);
   }
 
+  onDragStart = (e, index) => {
+    this.draggedItem = this.state.images[index];
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+  };
+
+  onDragOver = (e, index) => {
+    e.preventDefault();
+    const draggedOverItem = this.state.images[index];
+
+    // if the item is dragged over itself, ignore
+    if (this.draggedItem === draggedOverItem) {
+      return;
+    }
+
+    // filter out the currently dragged item
+    let images = this.state.images.filter(item => item !== this.draggedItem);
+
+    // add the dragged item after the dragged over item
+    images.splice(index, 0, this.draggedItem);
+
+    this.setState({ images });
+  };
+
+  onDragEnd = () => {
+    this.draggedItem = null;
+  };
+
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
     const loadingCSS = {
@@ -118,10 +147,18 @@ class Gallery extends React.Component {
     };
     return (
 
-      <div className='gallery-root'>
+      <div className='gallery-root'
+
+      >
           {this.state.images.map((dto, index) => {
+
             let key = `image-${dto.id}${index}`
-            return <Image key={key} dto={dto} galleryWidth={this.state.galleryWidth} />;
+            return <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
+              <Image dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)}
+                onDragEnd={this.onDragEnd}
+
+              />
+            </li>
         })}
 
         <div

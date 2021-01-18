@@ -56,10 +56,14 @@ class Image extends React.Component {
   closeModal = () => {
     this.setState({ openModal: false })
   }
+  
 
   render() {
     return (
       <div className='image-root'
+        draggable
+        onDragStart={this.props.onDragStart}
+        onDragEnd={this.props.onDragEnd}
         style={{
           height: this.state.size + 'px',
           display: this.state.display

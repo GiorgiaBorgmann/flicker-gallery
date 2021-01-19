@@ -27,7 +27,9 @@ class ModalImage extends React.Component {
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: 'white',
                 width: '40%',
-                height: '80%'
+                height: '80%',
+                backgroundColor: '#2b2b2b',
+                border: 'none'
             },
             overlay: {
                 backgroundColor: 'rgb(192,192,192, 0.4)'

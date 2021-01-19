@@ -37,16 +37,12 @@ class Image extends React.Component {
     this.calcImageSize();
   }
 
-  urlFromDto(dto) {
+  urlFromDto = (dto) => {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
 
-  rotateImage() {
+  rotateImage = () => {
     this.setState({ rotation: this.state.rotation + 90 })
-  }
-
-  deleteImage = () => {
-    this.setState({ display: 'none' })
   }
 
   modelOpener = () => {
@@ -57,7 +53,9 @@ class Image extends React.Component {
     this.setState({ openModal: false })
   }
   
-
+  deleteImage = () => {
+    this.setState({ display: 'none' })
+  }
   render() {
     return (
       <div className='image-root'
@@ -79,6 +77,7 @@ class Image extends React.Component {
             top: 0,
             right: 0,
             transform: `rotate(${this.state.rotation}deg)`,
+            filter: `${this.props.grayScaleStr}`
           }}
         >
         </div>

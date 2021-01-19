@@ -17,7 +17,11 @@ class Gallery extends React.Component {
       galleryWidth: this.getGalleryWidth(),
       page: 1,
       loading: false,
-      prevY: 0
+      prevY: 0,
+      display: '',
+      indexImg: 0,
+      grayScaleStr: 'grayscale(0%)',
+      grayValue: ''
     };
   }
 
@@ -76,6 +80,7 @@ class Gallery extends React.Component {
 
   componentDidMount() {
     this.getImages(this.props.tag);
+    this.changeGrayScale()
     this.setState({
       galleryWidth: document.body.clientWidth
     });
@@ -105,6 +110,7 @@ class Gallery extends React.Component {
 
   componentWillReceiveProps(props) {
     this.getImages(props.tag);
+    this.changeGrayScale(props.grayScale)
   }
 
   onDragStart = (e, index) => {
@@ -135,7 +141,21 @@ class Gallery extends React.Component {
   onDragEnd = () => {
     this.draggedItem = null;
   };
-  
+  changeIndex = (index) => {
+    this.setState({ indexImg: index })
+
+  }
+  changeGrayScale = (grayScale) => {
+    if (grayScale) {
+      this.setState({
+        grayScaleStr: 'grayscale(0%)'
+      })
+    } else {
+      this.setState({
+        grayScaleStr: 'grayscale(100%)'
+      })
+    }
+  }
 
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
@@ -147,25 +167,16 @@ class Gallery extends React.Component {
       width: '100%'
     };
     return (
-
-      <div className='gallery-root'
-
-      >
-          {this.state.images.map((dto, index) => {
-
+      <div className='gallery-root'>
+        {
+          this.state.images.map((dto, index) => {
             let key = `image-${dto.id}${index}`
-            return <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
-              <Image dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)}
-                onDragEnd={this.onDragEnd}
-
-              />
-            </li>
-        })}
-
-        <div
-          ref={loadingRef => (this.loadingRef = loadingRef)}
-          style={loadingCSS}
-        >
+            return (
+              <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
+                <Image dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScaleStr={this.state.grayScaleStr} />
+              </li>)
+          })}
+        <div ref={loadingRef => (this.loadingRef = loadingRef)} style={loadingCSS}>
           <span style={loadingTextCSS}>Loading...</span>
         </div>
       </div>

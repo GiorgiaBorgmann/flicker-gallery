@@ -4,7 +4,7 @@ html {
     padding: 0;
     margin: 0;
     font-family: 'Lato', sans-serif;
-    overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -54,6 +54,7 @@ body {
             width: 40%;
             border: none;
             font-weight: 600;
+            text-decoration: none;
         }
         .header-btn-color {
             background-color: #8f8c73;
@@ -93,30 +94,27 @@ body {
 }
 
 @media (max-width: 680px) {
-    .app-header{
+    .app-header {
         .btn-container {
             flex-flow: column;
             align-items: center;
-            width:100%;      
-            .header-btn-color,.header-btn-black {
+            width: 100%;
+            .header-btn-color,
+            .header-btn-black {
                 width: 50%;
                 margin-top: 2%;
-            } 
+            }
         }
-        .app-input{
-            width:80%;
+        .app-input {
+            width: 80%;
         }
-        .text-container h2{
+        .text-container h2 {
             font-size: 3rem;
         }
-        .text-container p{
+        .text-container p {
             font-size: 1.3rem;
         }
     }
-    
-    
-    
-    
 }
 
 @media (max-width: 360px) {

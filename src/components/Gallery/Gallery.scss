@@ -3,6 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 100vw;
+    scroll-behavior: smooth;
     .loading-text {
         height: 100px;
         margin: 30px;
@@ -22,6 +23,7 @@ li {
     overflow: hidden;
     width: 25%;
     list-style: none;
+    min-width: 200px;
 }
 
 .gallery-header {
@@ -35,6 +37,46 @@ li {
     font-size: 15pt;
 }
 
+.gallery-wrapper {
+    display: flex;
+}
+
+.gallery-root {
+    flex: 1;
+}
+
+.image-details-container {
+    flex: 1;
+    position: -webkit-sticky; /* for Safari */
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: sticky;
+    overflow: unset;
+    top: 1%;
+    height: 100vh;
+
+
+}
+.image-detail {    
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start ;
+    align-items:space-between ;
+    width: 100%;
+}
+.image{
+    border-radius: 15px;
+}
+.close{
+    margin-right: 10%;
+}
+.title-container{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    width: 100%;
+}
 @media (max-width: 680px) {
     li {
         width: 50%;

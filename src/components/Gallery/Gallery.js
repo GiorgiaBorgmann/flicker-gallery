@@ -10,6 +10,7 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
+    addEventListener('resize', () => this.setState({ galleryWidth: this.getGalleryWidth() }))
     this.state = {
       images: [],
       galleryWidth: this.getGalleryWidth(),
@@ -18,17 +19,21 @@ class Gallery extends React.Component {
       prevY: 0,
       display: '',
       indexImg: 0,
-      prevTag: props.tag
+      prevTag: props.tag,
+      isImageSelected: false,
+      selectedImageIndex: -1,
+      selectedImageId: ''
     };
   }
 
-  getGalleryWidth(){
+  getGalleryWidth() {
     try {
       return document.body.clientWidth;
     } catch (e) {
       return 1000;
     }
   }
+
   getImages(tag) {
     this.setState({ loading: true });
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&page=${this.state.page}&format=json&nojsoncallback=1`;
@@ -92,7 +97,7 @@ class Gallery extends React.Component {
       ), this.getImages(this.props.tag))
     }
     this.setState({ prevY: y });
-  }  
+  }
 
   onDragStart = (event, index) => {
     this.draggedItem = this.state.images[index];
@@ -119,8 +124,6 @@ class Gallery extends React.Component {
     this.draggedItem = null;
   };
 
-
-
   deleteImage = (idImg) => {
     const newArrImages = this.state.images.filter((image) => {
       return image.id !== idImg;
@@ -128,20 +131,76 @@ class Gallery extends React.Component {
     this.setState({ images: newArrImages });
   }
 
+  onImageSelect = (index, imgId) => {
+    this.setState({
+      isImageSelected: true,
+      selectedImageIndex: index,
+      selectedImageId: imgId
+    })
+  }
+  closeImageDetail = () => {
+    this.setState({
+      isImageSelected: false
+    })
+  }
+  urlFromDto = (dto) => {
+    return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
+  }
+  getComments = () => {
+    const getImagesUrl = `services/rest/?method=flickr.photos.suggestions.getList&api_key=522c1f9009ca3609bcbaf08545f067ad&photo_id=${this.state.selectedImageId}`;
+    const baseUrl = 'https://api.flickr.com/';
+    axios.get(baseUrl + getImagesUrl)
+      .then(res => console.log(res))
+  }
+
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
+    const showGallery = !(this.state.galleryWidth <= 680 && this.state.isImageSelected)
     return (
-      <div className='gallery-root'>
-        {
-          this.state.images.map((dto, index) => {
-            let key = `image-${dto.id}${index}`
-            return (
-              <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
-                <Image deleteImage={this.deleteImage} dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScale={this.props.grayScale} />
-              </li>)
-          })}
-        <div className='loading-text' ref={loadingRef => (this.loadingRef = loadingRef)}>
-          <span style={loadingTextCSS}>Loading...</span>
+      <div className='gallery-wrapper'>
+        <div className='gallery-root' style={showGallery ? null : { display: 'none' }}>
+          {
+            this.state.images.map((dto, index) => {
+              let key = `image-${dto.id}${index}`
+              return (
+                <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
+                  <Image
+                    deleteImage={this.deleteImage}
+                    dto={dto}
+                    galleryWidth={this.state.galleryWidth}
+                    onDragStart={e => this.onDragStart(e, index)}
+                    onDragEnd={this.onDragEnd}
+                    grayScale={this.props.grayScale}
+                    onImageSelect={this.onImageSelect}
+                    imageIndex={index}
+                  />
+                </li>)
+            })}
+          <div className='loading-text' ref={loadingRef => (this.loadingRef = loadingRef)}>
+            <span style={loadingTextCSS}>Loading...</span>
+          </div>
+        </div>
+        <div style={this.state.isImageSelected ? { display: 'flex' } : { display: 'none' }}
+          className="image-details-container">
+          {this.state.isImageSelected &&
+            <div className='image-detail'>
+
+              <div className='title-container'>
+                <h2>{this.state.images[this.state.selectedImageIndex].title}</h2>
+                <div className='close' onClick={this.closeImageDetail}>X</div>
+              </div>         
+              <img
+              className='image'
+                src={this.urlFromDto(this.state.images[this.state.selectedImageIndex])}
+                style={{
+                  width: '80%',
+                  height: '50vh',
+                  filter: `${this.props.grayScale ? 'grayScale(0%)' : 'grayScale(100%)'}`
+                }}
+                onClick={this.getComments}
+              />
+
+            </div>}
         </div>
       </div>
 

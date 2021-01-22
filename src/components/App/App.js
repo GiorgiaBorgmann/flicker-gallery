@@ -41,11 +41,13 @@ class App extends React.Component {
           </div>
           <input className='app-input' onChange={event => this.setState({ tag: event.target.value })} value={this.state.tag} />
           <div className='btn-container'>
-            <button onClick={this.colorfulGallery} className={this.state.btnClassC ? 'header-btn-color' : 'header-btn-black'} >Colorful Gallery</button>
-            <button onClick={this.blackAndWhiteGallery} className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}  >B&W Gallery</button>
+           <a href="#gallery" onClick={this.colorfulGallery} className={this.state.btnClassC ? 'header-btn-color' : 'header-btn-black'} >Colorful Gallery</a>
+           <a href="#gallery" onClick={this.blackAndWhiteGallery} className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}  >B&W Gallery</a>
           </div>
         </div>
-        <Gallery tag={this.state.tag} grayScale={this.state.grayScale} />
+        <div id='gallery'>
+          <Gallery  className="gallery" tag={this.state.tag} grayScale={this.state.grayScale} />
+        </div>
       </div>
     );
   }

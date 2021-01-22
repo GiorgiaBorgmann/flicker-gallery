@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Image from '../Image';
 import './Gallery.scss';
-
-
 class Gallery extends React.Component {
   static propTypes = {
     tag: PropTypes.string
@@ -36,47 +34,24 @@ class Gallery extends React.Component {
     this.setState({ loading: true });
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&page=${this.state.page}&format=json&nojsoncallback=1`;
     const baseUrl = 'https://api.flickr.com/';
-    axios({
-      url: getImagesUrl,
-      baseURL: baseUrl,
-      method: 'GET'
-    })
+    axios.get(baseUrl + getImagesUrl)
       .then(res => res.data)
       .then(res => {
-        if (
-          res &&
-          res.photos &&
-          res.photos.photo &&
-          res.photos.photo.length > 0 &&
-          this.props.tag === ''
-        ) {
+        if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.props.tag === '') {
           this.setState({ page: 1 })
           this.setState({ images: [] });
           this.setState({ loading: false });
 
-        } else if (
-          res &&
-          res.photos &&
-          res.photos.photo &&
-          res.photos.photo.length > 0 &&
-          this.state.page === 1
-        ) {
+        } else if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page === 1) {
           this.setState({ images: res.photos.photo });
           this.setState({ loading: false });
         }
-        else if (
-          res &&
-          res.photos &&
-          res.photos.photo &&
-          res.photos.photo.length > 0 &&
-          this.state.page > 1
-        ) {
+        else if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page > 1) {
           this.setState({ images: [...this.state.images, ...res.photos.photo] });
           this.setState({ loading: false });
         }
       });
   }
-
 
   componentDidMount() {
     this.getImages(this.props.tag);
@@ -96,55 +71,47 @@ class Gallery extends React.Component {
     );
     this.observer.observe(this.loadingRef);
   }
-  handleObserver(entities) {
-    const y = entities[0].boundingClientRect.y;
-    if (this.state.prevY > y) {
-      this.setState(prevState => (
-        {
-          page: prevState.page + 1
-        }
-      ), this.getImages(this.props.tag))
-    }
-    this.setState({ prevY: y });
-  }
 
   componentWillReceiveProps(props) {
     this.getImages(props.tag);
     this.changeGrayScale(props.grayScale)
   }
 
-  onDragStart = (e, index) => {
+  handleObserver(entities) {
+    const y = entities[0].boundingClientRect.y;
+    if (this.state.prevY > y) {
+      this.setState(prevState => (
+        { page: prevState.page + 1 }
+      ), this.getImages(this.props.tag))
+    }
+    this.setState({ prevY: y });
+  }  
+
+  onDragStart = (event, index) => {
     this.draggedItem = this.state.images[index];
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.target.parentNode);
-    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/html', event.target.parentNode);
+    event.dataTransfer.setDragImage(event.target.parentNode, 20, 20);
   };
 
-  onDragOver = (e, index) => {
-    e.preventDefault();
+  onDragOver = (event, index) => {
+    event.preventDefault();
     const draggedOverItem = this.state.images[index];
-
     // if the item is dragged over itself, ignore
     if (this.draggedItem === draggedOverItem) {
       return;
     }
-
     // filter out the currently dragged item
     let images = this.state.images.filter(item => item !== this.draggedItem);
-
     // add the dragged item after the dragged over item
     images.splice(index, 0, this.draggedItem);
-
     this.setState({ images });
   };
 
   onDragEnd = () => {
     this.draggedItem = null;
   };
-  changeIndex = (index) => {
-    this.setState({ indexImg: index })
 
-  }
   changeGrayScale = (grayScale) => {
     if (grayScale) {
       this.setState({
@@ -157,15 +124,15 @@ class Gallery extends React.Component {
     }
   }
 
+  deleteImage = (idImg) => {
+    const newArrImages = this.state.images.filter((image) => {
+      return image.id !== idImg;
+    });
+    this.setState({ images: newArrImages });
+  }
+
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
-    const loadingCSS = {
-      height: '100px',
-      margin: '30px',
-      display: 'flex',
-      justifyContent: 'center',
-      width: '100%'
-    };
     return (
       <div className='gallery-root'>
         {
@@ -173,10 +140,10 @@ class Gallery extends React.Component {
             let key = `image-${dto.id}${index}`
             return (
               <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
-                <Image dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScaleStr={this.state.grayScaleStr} />
+                <Image deleteImage={this.deleteImage} dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScaleStr={this.state.grayScaleStr} />
               </li>)
           })}
-        <div ref={loadingRef => (this.loadingRef = loadingRef)} style={loadingCSS}>
+        <div className='loading-text' ref={loadingRef => (this.loadingRef = loadingRef)}>
           <span style={loadingTextCSS}>Loading...</span>
         </div>
       </div>

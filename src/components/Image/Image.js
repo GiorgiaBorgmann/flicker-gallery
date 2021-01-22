@@ -52,10 +52,7 @@ class Image extends React.Component {
   closeModal = () => {
     this.setState({ openModal: false })
   }
-  
-  deleteImage = () => {
-    this.setState({ display: 'none' })
-  }
+
   render() {
     return (
       <div className='image-root'
@@ -83,8 +80,8 @@ class Image extends React.Component {
         </div>
         <div className='control-panel'>
           <FontAwesome onClick={this.rotateImage}
-            className="image-icon" name="sync-alt" title="rotate" />
-          <FontAwesome className="image-icon" name="trash-alt" title="delete" />
+            className='image-icon' name='sync-alt' title='rotate' />
+          <FontAwesome onClick={() => this.props.deleteImage(this.props.dto.id)} className='image-icon' name='trash-alt' title='delete' />
           <FontAwesome onClick={this.modelOpener} className='image-icon' name='expand' title='expand' />
         </div>
         <Modal openModal={this.state.openModal} closeModal={this.closeModal} modelOpener={this.modelOpener} dto={this.props.dto} ></Modal>

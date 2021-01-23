@@ -1,0 +1,40 @@
+.image-details-container {
+    flex: 1;
+    position: -webkit-sticky;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: sticky;
+    overflow: unset;
+    top: 60px;
+    height: 100vh;
+    .image-detail {
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: space-between;
+        width: 100%;
+        .close {
+            margin: 5% 1% 0 1%;
+            font-size: 1.5rem;
+            display: flex;
+            width: 95%;
+            justify-content: flex-end;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 400;
+        }
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            .carousel-icon {
+                font-size: 2.5rem;
+            }
+            img {
+                border-radius: 15px;
+            }
+        }
+    }
+}

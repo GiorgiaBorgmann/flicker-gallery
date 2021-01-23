@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import Image from '../Image';
+import Image from '../Image/Image';
+import ImageDetails from '../ImageDetails/ImageDetails'
 import './Gallery.scss';
 class Gallery extends React.Component {
   static propTypes = {
@@ -19,10 +20,9 @@ class Gallery extends React.Component {
       prevY: 0,
       display: '',
       indexImg: 0,
-      prevTag: props.tag,
+      prevTag: props.tag,      
       isImageSelected: false,
-      selectedImageIndex: -1,
-      selectedImageId: ''
+      selectedImageIndex: -1
     };
   }
 
@@ -138,28 +138,30 @@ class Gallery extends React.Component {
     this.setState({ images: newArrImages });
   }
 
-  onImageSelect = (index, imgId) => {
+
+  onImageSelect = (index) => {
     this.setState({
       isImageSelected: true,
-      selectedImageIndex: index,
-      selectedImageId: imgId
+      selectedImageIndex: index
     })
-  }
-  closeImageDetail = () => {
-    this.setState({
+}
+closeImageDetail = () => {
+  this.setState({
       isImageSelected: false
-    })
-  }
-  urlFromDto = (dto) => {
-    return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
-  }
-  getComments = () => {
-    const getImagesUrl = `services/rest/?method=flickr.photos.suggestions.getList&api_key=522c1f9009ca3609bcbaf08545f067ad&photo_id=${this.state.selectedImageId}`;
-    const baseUrl = 'https://api.flickr.com/';
-    axios.get(baseUrl + getImagesUrl)
-      .then(res => console.log(res))
-  }
-
+  })
+}
+subtractOneIndex = () => {
+  if (this.state.selectedImageIndex === 0) return
+  this.setState({
+      selectedImageIndex: this.state.selectedImageIndex - 1
+  })
+}
+addOneIndex = () => {
+  if (this.state.selectedImageIndex === this.state.images.length) return
+  this.setState({
+      selectedImageIndex: this.state.selectedImageIndex + 1
+  })
+}
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
     const showGallery = !(this.state.galleryWidth <= 680 && this.state.isImageSelected)
@@ -187,28 +189,15 @@ class Gallery extends React.Component {
             <span style={loadingTextCSS}>Loading...</span>
           </div>
         </div>
-        <div style={this.state.isImageSelected ? { display: 'flex' } : { display: 'none' }}
-          className="image-details-container">
-          {this.state.isImageSelected &&
-            <div className='image-detail'>
+        <ImageDetails
+          images={this.state.images}
+          isImageSelected={this.state.isImageSelected}
+          selectedImageIndex={this.state.selectedImageIndex}
+          closeImageDetail={this.closeImageDetail}
+          subtractOneIndex={this.subtractOneIndex}
+          addOneIndex={this.addOneIndex}
+        />
 
-              <div className='title-container'>
-                <h2>{this.state.images[this.state.selectedImageIndex].title}</h2>
-                <div className='close' onClick={this.closeImageDetail}>X</div>
-              </div>         
-              <img
-              className='image'
-                src={this.urlFromDto(this.state.images[this.state.selectedImageIndex])}
-                style={{
-                  width: '80%',
-                  height: '50vh',
-                  filter: `${this.props.grayScale ? 'grayScale(0%)' : 'grayScale(100%)'}`
-                }}
-                onClick={this.getComments}
-              />
-
-            </div>}
-        </div>
       </div>
 
     );

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import Modal from '../Modal/Modal';
 import './Image.scss';
 
 class Image extends React.Component {
@@ -20,7 +19,7 @@ class Image extends React.Component {
       display: '',
       rotation: 0,
       openModal: false
-    };
+    }
   }
 
   calcImageSize() {
@@ -84,8 +83,7 @@ class Image extends React.Component {
           <FontAwesome onClick={() => this.props.deleteImage(this.props.dto.id)} className='image-icon' name='trash-alt' title='delete' />
           <FontAwesome onClick={() => this.props.onImageSelect(this.props.imageIndex, this.props.dto.id)} className='image-icon' name='expand' title='expand' />
         </div>
-        <Modal openModal={this.state.openModal} closeModal={this.closeModal} modelOpener={this.modelOpener} dto={this.props.dto} ></Modal>
-      </div>
+        </div>
     );
   }
 }

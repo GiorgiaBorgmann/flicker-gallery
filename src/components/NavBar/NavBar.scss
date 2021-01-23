@@ -67,3 +67,12 @@
         }
     }
 }
+
+@media (max-width: 680px) {
+    .navbar {
+        display: none;
+    }
+    .navbar-flex-container {
+        display: none;
+    }
+}

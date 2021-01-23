@@ -51,8 +51,9 @@ class App extends React.Component {
     let displayNavbar = null
     let displayControlPanel = null
     if(this.state.scrollY > window.innerHeight - 60) {
-      displayNavbar = { display: 'flex' }
-      displayControlPanel = {display: 'none'}
+      if (document.body.clientWidth <= 680) return
+        displayNavbar = { display: 'flex' }
+        displayControlPanel = {display: 'none'}
     }
     return (
       <div className='app-root'>
@@ -60,7 +61,7 @@ class App extends React.Component {
           <div className='text-container'>
             <p>Flickr Gallery</p>
             <h2>Find your inspiration</h2>
-          </div>  
+          </div> 
           <NavBar inputText={this.state.inputText} handleSearch={this.handleSearch} btnClassB={this.state.btnClassB} btnClassC={this.state.btnClassC} handleInput={this.handleInput} displayNavbar={displayNavbar} tag={this.state.tag} colorfulGallery={this.colorfulGallery} blackAndWhiteGallery={this.blackAndWhiteGallery} />
           <div className='app-input'>
             <input className='input' style={displayControlPanel} onChange={(event) => this.handleInput(event)} value={this.state.inputText} />

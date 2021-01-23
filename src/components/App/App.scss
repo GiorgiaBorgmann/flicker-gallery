@@ -27,8 +27,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-flow: column;
-    
+    flex-flow: column;    
+    .navbar-app{
+        width: 100%;
+    }
     .app-input {
         display: flex;
         align-items: center;
@@ -115,15 +117,18 @@ body {
     color: #666;
     width: 400px;
 }
-.navbar-wrapper{
-}
 
 @media (max-width: 680px) {
     .app-header {
+        .navbar-app{
+            display: none;
+        }
         .btn-container {
             flex-flow: column;
             align-items: center;
             width: 100%;
+            transform:none;
+            position: relative;
             .header-btn-color,
             .header-btn-black {
                 width: 50%;
@@ -132,6 +137,8 @@ body {
         }
         .app-input {
             width: 80%;
+            transform: none;
+            position: relative;
         }
         .text-container h2 {
             font-size: 3rem;

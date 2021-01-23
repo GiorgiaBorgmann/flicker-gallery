@@ -74,7 +74,7 @@ class Image extends React.Component {
             top: 0,
             right: 0,
             transform: `rotate(${this.state.rotation}deg)`,
-            filter: `${this.props.grayScaleStr}`
+            filter: `${this.props.grayScale ? 'grayScale(0%)' : 'grayScale(100%)'}`
           }}
         >
         </div>

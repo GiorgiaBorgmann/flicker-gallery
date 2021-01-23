@@ -11,23 +11,24 @@ class App extends React.Component {
     super();
     this.state = {
       tag: 'art',
-      color: true,
-      btnClassC: false,
-      btnClassB: true,
+      btnClassC: true,
+      btnClassB: false,
       grayScale: true
     };
   }
   colorfulGallery = () => {
-    this.setState({ color: true })
-    this.setState({ btnClassC: true })
-    this.setState({ btnClassB: false })
-    this.setState({ grayScale: true })
+    this.setState({
+      btnClassC: true,
+      btnClassB: false,
+      grayScale: true
+    })
   }
   blackAndWhiteGallery = () => {
-    this.setState({ color: false })
-    this.setState({ btnClassC: false })
-    this.setState({ btnClassB: true })
-    this.setState({ grayScale: false })
+    this.setState({
+      btnClassC: false,
+      btnClassB: true,
+      grayScale: false
+    })
   }
 
   render() {
@@ -40,8 +41,8 @@ class App extends React.Component {
           </div>
           <input className='app-input' onChange={event => this.setState({ tag: event.target.value })} value={this.state.tag} />
           <div className='btn-container'>
-            <button onClick={this.blackAndWhiteGallery} className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}  >B&W Gallery</button>
             <button onClick={this.colorfulGallery} className={this.state.btnClassC ? 'header-btn-color' : 'header-btn-black'} >Colorful Gallery</button>
+            <button onClick={this.blackAndWhiteGallery} className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}  >B&W Gallery</button>
           </div>
         </div>
         <Gallery tag={this.state.tag} grayScale={this.state.grayScale} />

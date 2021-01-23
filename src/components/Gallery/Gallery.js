@@ -18,8 +18,7 @@ class Gallery extends React.Component {
       prevY: 0,
       display: '',
       indexImg: 0,
-      grayScaleStr: 'grayscale(0%)',
-      grayValue: ''
+      prevTag: props.tag
     };
   }
 
@@ -55,7 +54,6 @@ class Gallery extends React.Component {
 
   componentDidMount() {
     this.getImages(this.props.tag);
-    this.changeGrayScale()
     this.setState({
       galleryWidth: document.body.clientWidth
     });
@@ -64,7 +62,6 @@ class Gallery extends React.Component {
       rootMargin: '0px',
       threshold: 1.0
     };
-
     this.observer = new IntersectionObserver(
       this.handleObserver.bind(this),
       options
@@ -112,17 +109,7 @@ class Gallery extends React.Component {
     this.draggedItem = null;
   };
 
-  changeGrayScale = (grayScale) => {
-    if (grayScale) {
-      this.setState({
-        grayScaleStr: 'grayscale(0%)'
-      })
-    } else {
-      this.setState({
-        grayScaleStr: 'grayscale(100%)'
-      })
-    }
-  }
+
 
   deleteImage = (idImg) => {
     const newArrImages = this.state.images.filter((image) => {
@@ -140,7 +127,7 @@ class Gallery extends React.Component {
             let key = `image-${dto.id}${index}`
             return (
               <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
-                <Image deleteImage={this.deleteImage} dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScaleStr={this.state.grayScaleStr} />
+                <Image deleteImage={this.deleteImage} dto={dto} galleryWidth={this.state.galleryWidth} onDragStart={e => this.onDragStart(e, index)} onDragEnd={this.onDragEnd} grayScale={this.props.grayScale} />
               </li>)
           })}
         <div className='loading-text' ref={loadingRef => (this.loadingRef = loadingRef)}>

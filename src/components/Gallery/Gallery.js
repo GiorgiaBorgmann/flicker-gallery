@@ -36,18 +36,26 @@ class Gallery extends React.Component {
     axios.get(baseUrl + getImagesUrl)
       .then(res => res.data)
       .then(res => {
-        if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.props.tag === '') {
-          this.setState({ page: 1 })
-          this.setState({ images: [] });
-          this.setState({ loading: false });
-
-        } else if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page === 1) {
-          this.setState({ images: res.photos.photo });
-          this.setState({ loading: false });
+        if (tag !== this.state.prevTag) {
+          this.setState({
+            page: 1,
+            images: [],
+            loading: false,
+            prevState: tag
+          })
+          if (tag === '') return
+        }
+        if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page === 1) {
+          this.setState({
+            images: res.photos.photo,
+            loading: false
+          });
         }
         else if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page > 1) {
-          this.setState({ images: [...this.state.images, ...res.photos.photo] });
-          this.setState({ loading: false });
+          this.setState({
+            images: [...this.state.images, ...res.photos.photo],
+            loading: false
+          });
         }
       });
   }
@@ -69,12 +77,14 @@ class Gallery extends React.Component {
     this.observer.observe(this.loadingRef);
   }
 
-  componentWillReceiveProps(props) {
-    this.getImages(props.tag);
-    this.changeGrayScale(props.grayScale)
+  componentWillReceiveProps(nextProps) {
+    if (this.props.tag !== nextProps.tag) {
+      this.getImages(nextProps.tag);
+    }
   }
 
   handleObserver(entities) {
+    if (this.props.tag === '') return
     const y = entities[0].boundingClientRect.y;
     if (this.state.prevY > y) {
       this.setState(prevState => (

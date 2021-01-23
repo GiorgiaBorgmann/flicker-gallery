@@ -1,12 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './ImageDetails.scss';
-
+import FontAwesome from 'react-fontawesome';
 class ImageDetails extends React.Component {
-    static propTypes = {
-        dto: PropTypes.object
-    };
-
     constructor(props) {
         super(props);
     }
@@ -21,6 +16,28 @@ class ImageDetails extends React.Component {
             <div className="modal-container">
                 <h2>{this.props.dto.title}</h2>
                 <img src={`${this.urlFromDto(this.props.dto)}`} />
+                <h2>{this.props.images[this.props.selectedImageIndex].title}</h2>
+
+                <div className='carousel-wrapper'>
+                    <FontAwesome
+                        className='image-icon carousel-icon'
+                        name='angle-left'
+                        onClick={this.props.subtractOneIndex} />
+                    <img
+                        className='image'
+                        src={this.urlFromDto(this.props.images[this.props.selectedImageIndex])}
+                        style={{
+                            width: '80%',
+                            height: '50vh',
+                            filter: `${this.props.grayScale ? 'grayScale(0%)' : 'grayScale(100%)'}`
+                        }}
+                    />
+                    <FontAwesome
+                        className='image-icon carousel-icon'
+                        name='angle-right'
+                        onClick={this.props.addOneIndex}
+                    />
+                </div>
             </div>
         )
     }

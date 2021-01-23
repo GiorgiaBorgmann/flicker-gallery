@@ -48,7 +48,11 @@ class Gallery extends React.Component {
             loading: false,
             prevState: tag
           })
-          if (tag === '') return
+          if (tag === '') {
+            this.setState({
+              tag: 'art'
+            })
+          }
         }
         if (res && res.photos && res.photos.photo && res.photos.photo.length > 0 && this.state.page === 1) {
           this.setState({
@@ -64,7 +68,10 @@ class Gallery extends React.Component {
         }
       });
   }
-
+  componentWillUnmount() {
+    removeEventListener('resize')
+  }
+  
   componentDidMount() {
     this.getImages(this.props.tag);
     this.setState({

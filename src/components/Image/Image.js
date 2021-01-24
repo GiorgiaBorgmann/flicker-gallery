@@ -11,18 +11,13 @@ class Image extends React.Component {
 
   constructor(props) {
     super(props);
-    this.calcImageSize = this.calcImageSize.bind(this);
-    this.rotateImage = this.rotateImage.bind(this);
-    this.modelOpener = this.modelOpener.bind(this);
     this.state = {
       size: 200,
-      display: '',
-      rotation: 0,
-      openModal: false
+      rotation: 0
     }
   }
 
-  calcImageSize() {
+  calcImageSize = () => {
     const { galleryWidth } = this.props;
     const targetSize = 250;
     const imagesPerRow = Math.round(galleryWidth / targetSize);
@@ -31,25 +26,14 @@ class Image extends React.Component {
       size
     });
   }
-
   componentDidMount() {
     this.calcImageSize();
   }
-
   urlFromDto = (dto) => {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
-
   rotateImage = () => {
     this.setState({ rotation: this.state.rotation + 90 })
-  }
-
-  modelOpener = () => {
-    this.setState({ openModal: true })
-  }
-
-  closeModal = () => {
-    this.setState({ openModal: false })
   }
 
   render() {
@@ -59,8 +43,7 @@ class Image extends React.Component {
         onDragStart={this.props.onDragStart}
         onDragEnd={this.props.onDragEnd}
         style={{
-          height: this.state.size + 'px',
-          display: this.state.display
+          height: this.state.size + 'px'
         }}>
         <div
           className={'rotate'}
@@ -68,7 +51,6 @@ class Image extends React.Component {
             backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
             width: '100%',
             height: this.state.size + 'px',
-            display: this.state.display,
             position: 'absolute',
             top: 0,
             right: 0,
@@ -80,10 +62,18 @@ class Image extends React.Component {
         <div className='control-panel'>
           <FontAwesome onClick={this.rotateImage}
             className='image-icon' name='sync-alt' title='rotate' />
-          <FontAwesome onClick={() => this.props.deleteImage(this.props.dto.id)} className='image-icon' name='trash-alt' title='delete' />
-          <FontAwesome onClick={() => this.props.onImageSelect(this.props.imageIndex, this.props.dto.id)} className='image-icon' name='expand' title='expand' />
+          <FontAwesome
+            onClick={() => this.props.deleteImage(this.props.dto.id)}
+            className='image-icon' name='trash-alt' title='delete'
+          />
+          <FontAwesome
+            onClick={() => this.props.onImageSelect(this.props.imageIndex)}
+            className='image-icon'
+            name='expand'
+            title='expand'
+          />
         </div>
-        </div>
+      </div>
     );
   }
 }

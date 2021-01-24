@@ -1,18 +1,15 @@
+@import '../StyleComponents/variables';
+@import '../StyleComponents/flex';
 .image-details-container {
     flex: 1;
     position: -webkit-sticky;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    @include flexStart(row, flex-start);
     position: sticky;
     overflow: unset;
     top: 60px;
     height: 100vh;
     .image-detail {
-        display: flex;
-        flex-flow: column;
-        justify-content: flex-start;
-        align-items: space-between;
+        @include flexStart(column, space-between);
         width: 100%;
         .close {
             margin: 5% 1% 0 1%;
@@ -26,9 +23,7 @@
             font-weight: 400;
         }
         .carousel-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
+            @include flexSpaceAround();
             .carousel-icon {
                 font-size: 2.5rem;
             }

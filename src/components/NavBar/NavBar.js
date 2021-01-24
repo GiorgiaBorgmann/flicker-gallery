@@ -6,13 +6,10 @@ class NavBar extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-        };
     }
 
     render() {
         return (
-
             <div className='navbar' style={this.props.displayNavbar}>
                 <div className='navbar-flex-container'>
                     <div className='app-input-navbar'>
@@ -29,26 +26,27 @@ class NavBar extends React.Component {
                             />
                         </div>
                     </div>
-
-
-
                     <div className='btn-container-navbar'>
                         <a
                             onClick={this.props.colorfulGallery}
                             className={this.props.btnClassC ? 'header-btn-color' : 'header-btn-black'}
                         >
-                            Colorful Gallery</a>
+                            Colorful Gallery
+                        </a>
                         <a
                             onClick={this.props.blackAndWhiteGallery}
                             className={this.props.btnClassB ? 'header-btn-color' : 'header-btn-black'}
                         >
-                            B&W Gallery</a>
+                            B&W Gallery
+                            
+                        </a>
                         <a href='#gallery' className=' go-to-the-top'>
                             <FontAwesome
                                 className='image-icon'
                                 name='arrow-circle-up'
                                 title='go to the top'
-                            /></a>
+                            />
+                        </a>
                     </div>
                 </div>
             </div>

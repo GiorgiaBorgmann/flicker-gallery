@@ -6,23 +6,33 @@ import NavBar from '../NavBar/NavBar'
 import FontAwesome from 'react-fontawesome';
 
 class App extends React.Component {
-  static propTypes = {
-  };
 
   constructor() {
     super();
     addEventListener('scroll', () => {
       document.body.style.setProperty('--scroll', window.pageYOffset);
-      this.setState({scrollY: window.pageYOffset})
+      this.setState({ scrollY: window.pageYOffset })
     }, false);
+    addEventListener('resize', () => this.setState({ galleryWidth: this.getGalleryWidth() }))
     this.state = {
       tag: 'art',
-      inputText: 'art',
+      inputText: '',
       btnClassC: true,
       btnClassB: false,
       grayScale: true,
       scrollY: 0,
+      galleryWidth: this.getGalleryWidth()
     };
+  }
+  getGalleryWidth() {
+    try {
+      return document.body.clientWidth;
+    } catch (e) {
+      return 1000;
+    }
+  }
+  componentWillUnmount() {
+    removeEventListener('resize')
   }
   colorfulGallery = () => {
     this.setState({
@@ -39,21 +49,24 @@ class App extends React.Component {
     })
   }
   handleInput = (event) => {
-    event.preventDefault()
     this.setState({ inputText: event.target.value })
   }
-
   handleSearch = () => {
     this.setState({ tag: this.state.inputText })
   }
-
+  componentDidMount() {
+    this.setState({ bodyWidth: document.body.clientWidth })
+  }
+  
   render() {
     let displayNavbar = null
     let displayControlPanel = null
-    if(this.state.scrollY > window.innerHeight - 60) {
-      if (document.body.clientWidth <= 680) return
-        displayNavbar = { display: 'flex' }
-        displayControlPanel = {display: 'none'}
+    if (this.state.scrollY > window.innerHeight - 60) {
+      displayNavbar = { display: 'flex' }
+      displayControlPanel = { display: 'none' }
+    }
+    if (this.state.galleryWidth <= 680) {
+      displayNavbar = { display: 'none' }
     }
     return (
       <div className='app-root'>
@@ -61,10 +74,23 @@ class App extends React.Component {
           <div className='text-container'>
             <p>Flickr Gallery</p>
             <h2>Find your inspiration</h2>
-          </div> 
-          <NavBar inputText={this.state.inputText} handleSearch={this.handleSearch} btnClassB={this.state.btnClassB} btnClassC={this.state.btnClassC} handleInput={this.handleInput} displayNavbar={displayNavbar} tag={this.state.tag} colorfulGallery={this.colorfulGallery} blackAndWhiteGallery={this.blackAndWhiteGallery} />
+          </div>
+          <NavBar
+            inputText={this.state.inputText}
+            handleSearch={this.handleSearch}
+            btnClassB={this.state.btnClassB}
+            btnClassC={this.state.btnClassC}
+            handleInput={this.handleInput}
+            displayNavbar={displayNavbar}
+            tag={this.state.tag}
+            colorfulGallery={this.colorfulGallery}
+            blackAndWhiteGallery={this.blackAndWhiteGallery} />
           <div className='app-input'>
-            <input className='input' style={displayControlPanel} onChange={(event) => this.handleInput(event)} value={this.state.inputText} />
+            <input
+              className='input'
+              style={displayControlPanel}
+              onChange={(event) => this.handleInput(event)}
+              value={this.state.inputText} />
             <a
               className='search-item'
               href='#gallery'
@@ -78,12 +104,24 @@ class App extends React.Component {
             </a>
           </div>
           <div className='btn-container' style={displayControlPanel}>
-          <a href="#gallery" onClick={this.colorfulGallery} className={this.state.btnClassC ? 'header-btn-color' : 'header-btn-black'} >Colorful Gallery</a>
-          <a href="#gallery" onClick={this.blackAndWhiteGallery} className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}  >B&W Gallery</a>
+            <a
+              href="#gallery"
+              onClick={this.colorfulGallery}
+              className={this.state.btnClassC ? 'header-btn-color' : 'header-btn-black'}
+            >
+              Colorful Gallery
+            </a>
+            <a
+              href="#gallery"
+              onClick={this.blackAndWhiteGallery}
+              className={this.state.btnClassB ? 'header-btn-color' : 'header-btn-black'}
+            >
+              B&W Gallery
+            </a>
           </div>
-          </div>
+        </div>
         <div id='gallery'>
-          <Gallery  className="gallery" tag={this.state.tag} grayScale={this.state.grayScale} />
+          <Gallery className="gallery" tag={this.state.tag} grayScale={this.state.grayScale} />
         </div>
       </div>
     );

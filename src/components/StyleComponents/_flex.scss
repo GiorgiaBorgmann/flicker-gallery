@@ -1,0 +1,25 @@
+@mixin flexCenter($direction) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: $direction;
+}
+
+@mixin flexSpaceBetween {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin flexSpaceAround {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+@mixin flexStart($direction, $alignItems) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: $alignItems;
+    flex-flow: $direction;
+}

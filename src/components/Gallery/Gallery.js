@@ -20,12 +20,11 @@ class Gallery extends React.Component {
       prevY: 0,
       display: '',
       indexImg: 0,
-      prevTag: props.tag,      
+      prevTag: props.tag,
       isImageSelected: false,
       selectedImageIndex: -1
     };
   }
-
   getGalleryWidth() {
     try {
       return document.body.clientWidth;
@@ -33,7 +32,6 @@ class Gallery extends React.Component {
       return 1000;
     }
   }
-
   getImages(tag) {
     this.setState({ loading: true });
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&page=${this.state.page}&format=json&nojsoncallback=1`;
@@ -71,7 +69,6 @@ class Gallery extends React.Component {
   componentWillUnmount() {
     removeEventListener('resize')
   }
-  
   componentDidMount() {
     this.getImages(this.props.tag);
     this.setState({
@@ -88,13 +85,11 @@ class Gallery extends React.Component {
     );
     this.observer.observe(this.loadingRef);
   }
-
   componentWillReceiveProps(nextProps) {
     if (this.props.tag !== nextProps.tag) {
       this.getImages(nextProps.tag);
     }
   }
-
   handleObserver(entities) {
     if (this.props.tag === '') return
     const y = entities[0].boundingClientRect.y;
@@ -105,71 +100,62 @@ class Gallery extends React.Component {
     }
     this.setState({ prevY: y });
   }
-
   onDragStart = (event, index) => {
     this.draggedItem = this.state.images[index];
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('text/html', event.target.parentNode);
     event.dataTransfer.setDragImage(event.target.parentNode, 20, 20);
   };
-
   onDragOver = (event, index) => {
     event.preventDefault();
     const draggedOverItem = this.state.images[index];
-    // if the item is dragged over itself, ignore
     if (this.draggedItem === draggedOverItem) {
       return;
     }
-    // filter out the currently dragged item
     let images = this.state.images.filter(item => item !== this.draggedItem);
-    // add the dragged item after the dragged over item
     images.splice(index, 0, this.draggedItem);
     this.setState({ images });
   };
-
   onDragEnd = () => {
     this.draggedItem = null;
   };
-
   deleteImage = (idImg) => {
     const newArrImages = this.state.images.filter((image) => {
       return image.id !== idImg;
     });
     this.setState({ images: newArrImages });
   }
-
-
   onImageSelect = (index) => {
     this.setState({
       isImageSelected: true,
       selectedImageIndex: index
     })
-}
-closeImageDetail = () => {
-  this.setState({
+  }
+  closeImageDetail = () => {
+    this.setState({
       isImageSelected: false
-  })
-}
-subtractOneIndex = () => {
-  if (this.state.selectedImageIndex === 0) return
-  this.setState({
+    })
+  }
+  subtractOneIndex = () => {
+    if (this.state.selectedImageIndex === 0) return
+    this.setState({
       selectedImageIndex: this.state.selectedImageIndex - 1
-  })
-}
-addOneIndex = () => {
-  if (this.state.selectedImageIndex === this.state.images.length) return
-  this.setState({
+    })
+  }
+  addOneIndex = () => {
+    if (this.state.selectedImageIndex === this.state.images.length) return
+    this.setState({
       selectedImageIndex: this.state.selectedImageIndex + 1
-  })
-}
+    })
+  }
+
   render() {
     const loadingTextCSS = { display: this.state.loading ? 'block' : 'none' };
     const showGallery = !(this.state.galleryWidth <= 680 && this.state.isImageSelected)
     return (
       <div className='gallery-wrapper'>
         <div className='gallery-root' style={showGallery ? null : { display: 'none' }}>
-          {
-            this.state.images.map((dto, index) => {
+          {this.state.images.map((dto, index) => {
               let key = `image-${dto.id}${index}`
               return (
                 <li key={key} onDragOver={(e) => this.onDragOver(e, index)}>
@@ -196,10 +182,9 @@ addOneIndex = () => {
           closeImageDetail={this.closeImageDetail}
           subtractOneIndex={this.subtractOneIndex}
           addOneIndex={this.addOneIndex}
+          grayScale={this.props.grayScale}
         />
-
       </div>
-
     );
   }
 }

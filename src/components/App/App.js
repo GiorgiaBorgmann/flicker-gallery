@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.scss';
 import Gallery from '../Gallery';
-import PhotoHeader from './img/background-header.jpg'
-import NavBar from '../NavBar/NavBar'
+import NavBar from '../NavBar/NavBar';
 import FontAwesome from 'react-fontawesome';
 
 class App extends React.Component {

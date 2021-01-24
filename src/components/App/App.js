@@ -54,10 +54,11 @@ class App extends React.Component {
   handleSearch = () => {
     this.setState({ tag: this.state.inputText })
   }
-  componentDidMount() {
-    this.setState({ bodyWidth: document.body.clientWidth })
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSearch()
+    }
   }
-  
   render() {
     let displayNavbar = null
     let displayControlPanel = null
@@ -87,10 +88,12 @@ class App extends React.Component {
             blackAndWhiteGallery={this.blackAndWhiteGallery} />
           <div className='app-input'>
             <input
+              onKeyPress={this.handleKeyPress}
               className='input'
               style={displayControlPanel}
               onChange={(event) => this.handleInput(event)}
-              value={this.state.inputText} />
+              value={this.state.inputText}
+            />
             <a
               className='search-item'
               href='#gallery'

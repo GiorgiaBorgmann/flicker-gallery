@@ -7,6 +7,11 @@ class NavBar extends React.Component {
     constructor(props) {
         super(props);
     }
+    handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            this.props.handleSearch()
+        }
+    }
 
     render() {
         return (
@@ -14,6 +19,7 @@ class NavBar extends React.Component {
                 <div className='navbar-flex-container'>
                     <div className='app-input-navbar'>
                         <input
+                            onKeyPress={this.handleKeyPress}
                             className='input-navbar'
                             value={this.props.inputText}
                             onChange={(e) => this.props.handleInput(e)}

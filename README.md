@@ -1,4 +1,5 @@
 # Flickr Gallery - New features
+- Deployed app: https://giorgiaborgmann.github.io/advanced-gallery-exam/
 - NavBar animation: 
 The search input text and the buttons of the page header translate on the X-axis, triggered by the scroll to form the navbar. In the navbar it is possible to search for new pictures, toggle between grayscale and colored pictures, and return to the top of the image gallery.
 

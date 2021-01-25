@@ -70,7 +70,7 @@ class App extends React.Component {
     }
     return (
       <div className='app-root'>
-        <div className='app-header' style={{ backgroundImage: `url(${PhotoHeader})` }}>
+        <div className='app-header'>
           <div className='text-container'>
             <p>Flickr Gallery</p>
             <h2>Find your inspiration</h2>
